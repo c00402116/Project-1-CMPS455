@@ -63,7 +63,7 @@ public class Main {
             }
             mutex.release();
 
-            System.out.println("Reader " + Integer.parseInt(currentThread().getName()) + " is reading. (Readcount: " + readcount + ")");
+            System.out.println("Reader " + Integer.parseInt(currentThread().getName()) + " is reading.");
             for (int i = 0; i < (int)((Math.random() * 1000) + 1000); i++) {
                 //beep boop. Reading I guess. maybe an audiobook would be better.
             }
@@ -319,6 +319,8 @@ public class Main {
 
                     System.out.println("Philosopher " + currentThread().getName() + " is picking up left chopstick #" + Integer.parseInt(currentThread().getName()));
 
+                    currentThread().yield();
+
                     try {
                         Philosopher.chopsticks[(Integer.parseInt(currentThread().getName()) + 1) % chopsticks.length].acquire();
                     } catch (InterruptedException e) {
@@ -357,7 +359,7 @@ public class Main {
                 }
 
                 try {
-                    currentThread().sleep(1000);
+                    currentThread().sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -390,7 +392,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-
         if (args.length == 1) {
             switch (args[0]) {
                 case "D":
@@ -746,16 +747,18 @@ public class Main {
             //System.out.println(i + "main");
             philosophers[i] = new Philosopher(name, sitBarrier, leaveBarrier, chopsticks, meals);
         }
-
+        long start = System.nanoTime();
         //finally, we run all the philosopher threads.
         for (int i = 0; i < P; i++) {
             philosophers[i].start();
         }
+        long end = System.nanoTime();
 
         //only after all philosophers are instantiated can they sit. sitBarrier is what keeps this from happening early.
         for (int i = 0; i < P; i++) {
             sitBarrier.release();
         }
 
+        System.out.println(end-start);
     }
 }
