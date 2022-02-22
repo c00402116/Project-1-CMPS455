@@ -319,7 +319,7 @@ public class Main {
 
                     System.out.println("Philosopher " + currentThread().getName() + " is picking up left chopstick #" + Integer.parseInt(currentThread().getName()));
 
-                    currentThread().yield();
+                    //currentThread().yield();
 
                     try {
                         Philosopher.chopsticks[(Integer.parseInt(currentThread().getName()) + 1) % chopsticks.length].acquire();
